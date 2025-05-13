@@ -1,0 +1,110 @@
+function loadProducts(){
+    fetch('obtener_productos.php')
+        .then(response => response.json())
+        .then(products => {
+
+            const productList= document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product');
+                productDiv.setAttribute('data-id', product.id);
+
+                const img = document.createElement('img');
+                img.src = `images/${product.imagen}`;
+                img.alt = product.nombre;
+                productDiv.appendChild(img);
+
+                const name = document.createElement('h3');
+                name.textContent = product.nombre;
+                productDiv.appendChild(name);
+
+                // Crear y agregar la categoría
+                const categoria = document.createElement('span');
+                categoria.classList.add('product-categoria');
+                categoria.textContent = product.categoria;
+                productDiv.appendChild(categoria);
+
+                const cantidad = document.createElement('p');
+                cantidad.classList.add('product-cantidad');
+                cantidad.textContent = `Cantidad disponible: ${product.cantidad}`;
+                productDiv.appendChild(cantidad);
+
+                // Crear y agregar la descripción
+                const descripcion = document.createElement('p');
+                descripcion.classList.add('product-description');
+                descripcion.textContent = product.descripcion;
+                productDiv.appendChild(descripcion);
+                
+                const price = document.createElement('p');
+                price.classList.add('price');
+                price.textContent = `Precio: $${product.precio}`;
+                productDiv.appendChild(price);
+
+                const button = document.createElement('button');
+                button.textContent = 'Añadir al carrito';
+                button.classList.add('add-to-cart');
+                button.addEventListener('click', () =>{
+                    addToCart(product);
+                });
+                productDiv.appendChild(button);
+                productList.appendChild(productDiv);
+            });
+        });
+}
+
+
+let cart = [];
+
+function updateCart() {
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+
+    cartItems.innerHTML = '';
+
+    if(cart.length === 0) {
+        cartItems.innerHTML = '<p>Tu carrito está vacío.</p>';
+        cartTotal.textContent = '0';
+        return;
+    }
+
+    let total = 0;
+    cart.forEach(item =>{
+        const productDiv = document.createElement('div');
+        productDiv.textContent = `${item.nombre} - $${item.precio}`;
+        cartItems.appendChild(productDiv);
+        total += parseFloat(item.precio);
+    });
+
+    cartTotal.textContent = total.toFixed(2);
+}
+
+function addToCart(product){
+    cart.push(product);
+    updateCart();
+}
+
+document.getElementById('checkout').addEventListener('click', () => {
+    if(cart.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+    }
+    fetch('procesar_compra.php', {
+
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(cart)
+    }).then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        cart = [];
+        updateCart();
+      });
+});
+
+
+loadProducts();

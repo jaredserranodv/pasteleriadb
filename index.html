@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasteleria</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html"> <div class="img-container"></div> </a>
+            <nav>
+                <a href="#acerca-de">Acerca de</a>
+                <a href="#menu">Menú</a>
+                <a href="#">Pedidos</a>
+                <a href="galeria.html">Galería</a>
+                <a href="#reseñas">Reseñas</a>
+                <a href="#">Abastecimiento</a>
+                <a href="carrito.html"> <img src="Pasteleria/carrito.png" alt="carrito" id="carrito-img"></a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="hero">
+                <h1>Endulzamos tus momentos con cada bocado!</h1>
+        </section>
+    </div>
+
+    <section id="acerca-de">
+        <div class="container">
+            <div class="img-container"></div>
+            <div class="texto">
+            <h2>Sobre nosotros</h2>
+            <p>Somos mucho más que una simple pasteleria; somos un equipo apasionado por endulzar la vida de nuestros clientes. Desde nuestros inicios, nos hemos comprometido a ofrecer productos de la más alta calidad, elaborados con dedicación, creatividad y un toque de autenticidad que nos distingue. En Dolce Forno, no solo creamos pasteles; creamos sonrisas. Te invitamos a ser parte de nuestra dulce historia y a descubrir por qué somos la elección preferida de quienes buscan calidad, innovación y autenticidad en cada bocado.</p>
+            </div>    
+        </div>
+    </section>
+
+    <section id="menu">  <!--Pendiente por hacer la base de datos para carrito e investigar porque no se pone la imagen--> 
+        <div class="container">
+            <h2>Menú</h2>
+            <h3>Clásico</h3>
+            <div class="img-container-clasico">
+                <img class="imgen" src="Pasteleria/Pasteles/clasico1.jpg" alt="PastelClasico1">
+                <img class="imgen" src="Pasteleria/Pasteles/clasico2.jpg" alt="PastelClasico2">
+            </div>
+
+            <div class="img-container-clasico2">
+                <img class="imgen" src="Pasteleria/Pasteles/clasico5.jpg" alt="PastelClasico3">
+                <img class="imgen" src="Pasteleria/Pasteles/clasico6.jpg" alt="PastelClasico4">
+            </div>
+
+            <h3>Corazón</h3>
+            <div class="img-container-corazon">
+                <img class="imgen" src="Pasteleria/Pasteles/corazon1.jpg" alt="PastelCorazon1">
+                <img class="imgen" src="Pasteleria/Pasteles/corazon2.jpg" alt="PastelCorazon2">
+            </div>
+
+            <div class="img-container-corazon2">
+                <img class="imgen" src="Pasteleria/Pasteles/corazon3.jpg" alt="PastelClasico3">
+                <img class="imgen" src="Pasteleria/Pasteles/corazon4.jpg" alt="PastelClasico4">
+            </div>
+        </div>
+    </section>
+
+    <section id="pedidos">
+        <div class="container">
+            
+            <div class="texto">
+            <h2>Enviamos a domicilio</h2>
+            </div>
+            <!--Pendiente checar porque no son responsive las imagenes--> 
+
+            <div class="cartas">
+                <div class="carta">
+                    <div class="img-container"></div>
+                    <h3>Entrega garantizada</h3>
+                    <p>Recibe tu pedido el día solicitado o recogelo en tienda</p>
+                </div>
+
+                
+                <div class="carta">
+                    <div class="img-container2"></div>
+                    <h3>Compra segura</h3>
+                    <p>Sientete seguro al pedir con nosotros</p>
+                </div>
+
+            
+                <div class="carta">
+                    <div class="img-container3"></div>
+                    <h3>Envíos solo en Puebla</h3>
+                    <p>Zona donde nos ubicamos</p>
+                </div>
+            </div>    
+            <form action="carrito.html"> <!--Ejemplo para redireccionar a otra pagina donde será la de pedidos--> 
+            <button>¡Pide ahora!</button>
+            </form>
+
+        </div>
+    </section>
+    <!--
+    <section id="galeria">
+        <div class="container">
+            <h2>Bienvenido a nuestra Galería de Sabores y Diseños</h2>
+            <p>Aquí encontrarás un recorrido visual por nuestras creaciones más exquisitas
+            <br>Cada fotografía captura la esencia de lo que hacemos pasteles únicos, llenos de sabor, creatividad y detalles que hacen la diferencia.</p>
+            <h3>¡Bienvenido a un mundo de dulcura y arte en Dolce Forno!</h3>
+                <section id="fotos">
+                <img src="/Pasteleria/Pasteles/clasico6.jpg" alt="pastel clasico 6">
+                <img src="/Pasteleria/Pasteles/clasico7.jpg" alt="pastel clasico 7">
+                <img src="/Pasteleria/Pasteles/clasico8.jpg" alt="pastel clasico 8">
+                <img src="/Pasteleria/Pasteles/clasico9.jpg" alt="pastel clasico 9">
+
+
+                </section>
+        </div>
+    </section>
+--> 
+    <section id="reseñas">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="title">Opiniones de clientes</h2>
+            </div>
+            <div class="testimonials-content">
+                <div class="swiper testimonials-slider js-testimonials-slider">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide testimonials-item">
+                            <div class="info">
+                                <img src="Pasteleria/Personas/npc1.jpg" alt="persona 1">
+                                <div class="text-box">
+                                    <h3 class="name">Jared Serrano</h3>
+                                    <span class="job">Desarrollador web</span>
+                                </div>
+                            </div>
+                                        <p>Cada vez que hay un cumpleaños en mi familia, venimos aquí. Nunca fallan, los diseños son hermosos y los sabores aún mejor.</p>
+                                    <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    </div>
+                        </div>
+
+                        <div class="swiper-slide testimonials-item">
+                            <div class="info">
+                                <img src="Pasteleria/Personas/npc2.jpg" alt="persona 2">
+                                <div class="text-box">
+                                    <h3 class="name">Diana Rojas</h3>
+                                    <span class="job">Desarrolladora web</span>
+                                </div>
+                            </div>
+                            <p>Siempre que hay una celebración, paso por mi pastel aquí. Nunca me han fallado y siempre queda riquísimo.</p>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide testimonials-item">
+                            <div class="info">
+                                <img src="Pasteleria/Personas/npc3.jpg" alt="persona 3">
+                                <div class="text-box">
+                                    <h3 class="name">Metzi Robles</h3>
+                                    <span class="job">Arquitecta</span>
+                                </div>
+                            </div>
+                            <p>Ya he probado varios sabores y todos me han encantado. El de frutos rojos fue una sorpresa, súper balanceado.</p>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-slide testimonials-item">
+                            <div class="info">
+                                <img src="Pasteleria/Personas/npc4.jpg" alt="persona 4">
+                                <div class="text-box">
+                                    <h3 class="name">Juan Perez</h3>
+                                    <span class="job">Ingeniero</span>
+                                </div>
+                            </div>
+                            <p>No importa si es para una ocasión especial o solo un antojo, aquí siempre salgo contento con mi pastel.</p>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide testimonials-item">
+                            <div class="info">
+                                <img src="Pasteleria/Personas/npc5.jpg" alt="persona 5">
+                                <div class="text-box">
+                                    <h3 class="name">Mariel Garcia</h3>
+                                    <span class="job">Doctor</span>
+                                </div>
+                            </div>
+                            <p>Desde que descubrí este lugar ya no busco en otro lado. Siempre quedo bien cuando llevo uno de sus pasteles.</p>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="swiper-pagination js-testimonials-pagination"></div>
+            </div>
+             <!--  <button>¡Coméntanos tu experiencia!</button> --> 
+
+        </div>
+    </section>
+
+    <!--  
+    <section id="abastecimiento">
+        <div class="container">
+
+        </div>
+    </section>
+    --> 
+
+    <div class="container">
+        <section id="final">
+                <h1>¡Pide tu pastel con nosotros!</h1>
+        </section>
+    </div>
+
+
+    <footer class="pie-pagina">
+        <div class="grupo-1">
+            <div class="box">
+                <!--  <p class="logo">Dolce Forno</p> --> 
+                <figure>
+                    <a href="#">
+                        <img src="Pasteleria/dolce-forno.png" alt="Logo Dolce Forno">
+                    </a>
+                    
+                </figure>
+            </div>
+
+            <div class="box">
+                <h2>¿NECESITAS SERVICIO A DOMICILIO?</h2>
+                <p>Comunícate con nosotros para verificar si tenemos cobertura en tu zona.</p>
+            
+                <a href=https://wa.me/522229743899 class="fa fa-whatsapp"> +52 222 974 3899</a>
+                
+                <p></p>
+            </div>
+
+            <div class="box">
+                <h2>NUESTRAS REDES</h2>
+                <div class="red-social">
+                    <a href=https://www.facebook.com/JaredRS345 class="fa fa-facebook"></a>
+                    <a href=https://www.instagram.com/jaredserranoo/ class="fa fa-instagram"></a>
+                    <a href=https://x.com/ class="fa fa-x"></a>
+                    <a href=https://www.youtube.com/ class="fa fa-youtube"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="grupo-2">
+            <small>&copy; 2025 <b>Dolce Forno</b> - Todos los derechos reservados.</small>
+        </div>
+
+    </footer>
+
+
+    <script src="https://kit.fontawesome.com/4efa4c3711.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.js-testimonials-slider', {
+            grabCursor:true,
+            spaceBetween:30,
+            pagination:{
+                el: '.js-testimonials-pagination',
+                clickable:true
+            },
+            breakpoints:{
+                767:{
+                    slidesPerView: 2         /*slidesPerView: 2  Se mostraran 2 por desliz*/
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+<!--  
+<img src="/Pasteleria/Pasteles/clasico10.jpg" alt="pastel clasico 10">
+<img src="/Pasteleria/Pasteles/clasico11.jpg" alt="pastel clasico 11">
+<img src="/Pasteleria/Pasteles/clasico12.jpg" alt="pastel clasico 12">
+<img src="/Pasteleria/Pasteles/clasico13.jpg" alt="pastel clasico 13">
+<img src="/Pasteleria/Pasteles/clasico14.jpg" alt="pastel clasico 14">
+<img src="/Pasteleria/Pasteles/clasico15.jpg" alt="pastel clasico 15">
+<img src="/Pasteleria/Pasteles/clasico16.jpg" alt="pastel clasico 16">
+<img src="/Pasteleria/Pasteles/clasico17.jpg" alt="pastel clasico 17">
+<img src="/Pasteleria/Pasteles/clasico18.jpg" alt="pastel clasico 18">
+<img src="/Pasteleria/Pasteles/clasico19.jpg" alt="pastel clasico 19">
+--> 
