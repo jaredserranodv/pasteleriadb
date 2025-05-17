@@ -71,6 +71,11 @@ header nav{
     height: 30px;
 }
 
+#usuario-img {
+    width: 30px;
+    height: 30px;
+}
+
 header .img-container{
     margin-top: 10px;
     background-size: cover;

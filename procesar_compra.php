@@ -20,7 +20,7 @@ if($data){
         $stmt->bindParam(':name', $item['nombre']);
         $stmt->bindParam(':price', $item['precio']);
         $stmt->bindParam(':fecha', $fechaCompra);
-
+            
         $stmt->execute();
     }
 

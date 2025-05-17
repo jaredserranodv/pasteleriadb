@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css">
+    <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
+    <script src="/js/validation.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../../index.html"> <div class="img-container"></div> </a>
+            <nav>
+            <a href="../../index.html">Acerca de</a>
+            <a href="../../index.html">Menú</a>
+            <a href="#">Pedidos</a>
+            <a href="../../galeria.html">Galería</a>
+            <a href="../../index.html">Reseñas</a>
+                <a href="../../carrito.html"> <img src="../carrito.png" alt="carrito" id="carrito-img"></a>
+                <a href="/Pasteleria/signup-login/login.php"> <img src="../usuario.png" alt="usuario" id="usuario-img"></a>
+            </nav>
+        </div>  
+    </header>
+    
+    <section id="registro-instagram">
+        <div class="registro-container">
+          <h2>Regístrate</h2>
+          <form action="process-signup.php" method="post" id="signup" novalidate>
+            <input type="text" id="name" name="name" placeholder="Nombre completo" required>
+      
+            <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+      
+            <input type="password" id="password" name="password" placeholder="Contraseña" required>
+      
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Repite la contraseña" required>
+      
+            <button type="submit">Registrarse</button>
+      
+            <p class="login-link">¿Ya tienes una cuenta? <a href="login.php">Inicia sesión</a></p>
+          </form>
+        </div>
+      </section>
+      
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+

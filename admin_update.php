@@ -64,7 +64,7 @@ if(isset($_POST['update_product'])){
 <div class="admin-product-form-container centered">
 
    <?php
-      
+            
       $select = mysqli_query($conn, "SELECT * FROM products WHERE id = '$id'");
       while($row = mysqli_fetch_assoc($select)){
 
