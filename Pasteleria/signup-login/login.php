@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Inicio de sesión</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="home.css">
 </head>
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="img-container"></div>
 
     <div class="texto login-form">
-      <h2>Inicia sesión</h2>
+      <h2>Iniciar sesión</h2>
 
       <?php if ($is_invalid): ?>
         <em style="color: red; margin-bottom: 10px;">Correo o contraseña incorrectos</em>

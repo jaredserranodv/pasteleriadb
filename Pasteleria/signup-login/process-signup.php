@@ -47,7 +47,7 @@ $stmt->bind_param("sssi",
                   
 if ($stmt->execute()) {
 
-    header("Location: signup-success.html");
+    header("Location: login.php");
     exit;
     
 } else {
