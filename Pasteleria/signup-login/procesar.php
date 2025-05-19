@@ -10,6 +10,8 @@ if (!isset($_SESSION["user_id"])) {
 $mysqli = require __DIR__ . "/database.php";
 
 // Sanitizar entradas
+$nombre = $_POST["nombre"];
+$email = $_POST["email"];
 $user_id = $_SESSION["user_id"];
 $calle = $_POST["calle"];
 $numero = $_POST["numero"];
@@ -19,6 +21,16 @@ $estado = $_POST["estado"];
 $ciudad = $_POST["ciudad"];
 $telefono = $_POST["telefono"];
 $telefono2 = $_POST["telefono2"] ?? null; // Puede ser null
+
+// Actualizar nombre y correo en la tabla user
+$sqlUser = "UPDATE user SET name = ?, email = ? WHERE id = ?";
+$stmtUser = $mysqli->prepare($sqlUser);
+$stmtUser->bind_param("ssi", $nombre, $email, $user_id);
+
+if (!$stmtUser->execute()) {
+    echo "Error al actualizar nombre y correo: " . $stmtUser->error;
+    exit;
+}
 
 // Comprobar si ya existe registro para este usuario
 $checkSql = "SELECT id FROM user_info WHERE user_id = ?";
@@ -41,7 +53,7 @@ if ($result->fetch_assoc()) {
 }
 
 if ($stmt->execute()) {
-    header("Location: perfil_guardado.php"); // Redirige a una página de confirmación
+    header("Location: perfilguardado.php"); // Redirige a una página de confirmación
     exit;
 } else {
     echo "Error al guardar datos: " . $stmt->error;
