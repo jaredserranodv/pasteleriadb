@@ -1,23 +1,42 @@
 <?php
 
-@include 'config.php';
+$conn = mysqli_connect('localhost', 'root', '', 'pasteleriadolceforno');
+
+if (!$conn) {
+    die("Error de conexión: " . mysqli_connect_error());
+}
+
 
 if(isset($_POST['add_product'])){
 
    $product_name = $_POST['product_name'];
+   $product_desc = $_POST['product_desc'];
    $product_price = $_POST['product_price'];
+   $product_category = $_POST['product_category'];
+   $product_quantity = $_POST['product_quantity'];
    $product_image = $_FILES['product_image']['name'];
    $product_image_tmp_name = $_FILES['product_image']['tmp_name'];
    $product_image_folder = 'uploaded_img/'.$product_image;
 
-   if(empty($product_name) || empty($product_price) || empty($product_image)){
-      $message[] = 'Por favor llena los campos';
+   // Validar que no estén vacíos
+   if(empty($product_name) || empty($product_desc) || empty($product_price) || empty($product_category) || empty($product_quantity) || empty($product_image)){
+      $message[] = 'Por favor llena todos los campos';
    }else{
-      $insert = "INSERT INTO products(name, price, image) VALUES('$product_name', '$product_price', '$product_image')";
-      $upload = mysqli_query($conn,$insert);
+      // Escapar strings para evitar inyección
+      $product_name = mysqli_real_escape_string($conn, $product_name);
+      $product_desc = mysqli_real_escape_string($conn, $product_desc);
+      $product_category = mysqli_real_escape_string($conn, $product_category);
+      $product_price = floatval($product_price);
+      $product_quantity = intval($product_quantity);
+
+      $insert = "INSERT INTO productos(nombre, descripcion, precio, categoria, cantidad, imagen) 
+                 VALUES ('$product_name', '$product_desc', $product_price, '$product_category', $product_quantity, '$product_image')";
+
+      $upload = mysqli_query($conn, $insert);
+
       if($upload){
          move_uploaded_file($product_image_tmp_name, $product_image_folder);
-         $message[] = 'Producto añadido';
+         $message[] = 'Producto añadido correctamente';
       }else{
          $message[] = 'No se pudo añadir el producto';
       }
@@ -27,7 +46,7 @@ if(isset($_POST['add_product'])){
 
 if(isset($_GET['delete'])){
    $id = $_GET['delete'];
-   mysqli_query($conn, "DELETE FROM products WHERE id = $id");
+   mysqli_query($conn, "DELETE FROM productos WHERE id = $id");
    header('location:admin_page.php');
 };
 
@@ -63,15 +82,11 @@ if(isset($_GET['delete'])){
     </header>
 
 <?php
-
 if(isset($message)){
    foreach($message as $message){
       echo '<span class="message">'.$message.'</span>';
    }
 }
-
-
-
 ?>
 
 
@@ -80,44 +95,57 @@ if(isset($message)){
 
    <div class="admin-product-form-container">
 
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-         <h3>Añadir un nuevo producto</h3>
-         <input type="text" placeholder="Ingresa el nombre del producto" name="product_name" class="box">
-         <input type="number" placeholder="Ingresa el precio del producto" name="product_price" class="box">
-         <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box">
-         <input type="submit" class="btn" name="add_product" value="Añadir producto">
+         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+      <h3>Añadir un nuevo producto</h3>
+      <input type="text" name="product_name" placeholder="Ingresa el nombre del producto" class="box" required>
+      <textarea name="product_desc" placeholder="Ingresa la descripción del producto" class="box" required></textarea>
+      <input type="number" step="0.01" name="product_price" placeholder="Ingresa el precio del producto" class="box" required>
+      <input type="text" name="product_category" placeholder="Ingresa la categoría del producto" class="box" required>
+      <input type="number" name="product_quantity" placeholder="Ingresa la cantidad disponible" class="box" required>
+      <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box" required>
+      <input type="submit" class="btn" name="add_product" value="Añadir producto">
       </form>
 
    </div>
 
    <?php
 
-   $select = mysqli_query($conn, "SELECT * FROM products");
+   $select = mysqli_query($conn, "SELECT * FROM productos");
    
    ?>
-   <div class="product-display">
-      <table class="product-display-table">
-         <thead>
-         <tr>
-            <th>Imagen</th>
-            <th>Nombre del producto</th>
-            <th>Precio</th>
-            <th>Acción</th>
-         </tr>
-         </thead>
-         <?php while($row = mysqli_fetch_assoc($select)){ ?>
-         <tr>
-            <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
-            <td><?php echo $row['name']; ?></td>
-            <td>$<?php echo $row['price']; ?>/-</td>
-            <td>
-               <a href="admin_update.php?edit=<?php echo $row['id']; ?>" class="btn"> <i class="fas fa-edit"></i> Editar </a>
-               <a href="admin_page.php?delete=<?php echo $row['id']; ?>" class="btn"> <i class="fas fa-trash"></i> Eliminar </a>
-            </td>
-         </tr>
-      <?php } ?>
-      </table>
-   </div>
+         <div class="product-display">
+         <table class="product-display-table">
+            <thead>
+               <tr>
+               <th>Imagen</th>
+               <th>Nombre del producto</th>
+               <th>Descripción</th>
+               <th>Categoría</th>
+               <th>Cantidad</th>
+               <th>Precio</th>
+               <th>Acción</th>
+               </tr>
+            </thead>
+            <?php while($row = mysqli_fetch_assoc($select)){ ?>
+               <tr>
+               <td><img src="images/<?php echo htmlspecialchars($row['imagen']); ?>" height="100" alt=""></td>
+               <td><?php echo htmlspecialchars($row['nombre']); ?></td>
+               <td><?php echo htmlspecialchars($row['descripcion']); ?></td>
+               <td><?php echo htmlspecialchars($row['categoria']); ?></td>
+               <td><?php echo (int)$row['cantidad']; ?></td>
+               <td>$<?php echo number_format($row['precio'], 2); ?></td>
+               <td>
+                  <a href="admin_update.php?edit=<?php echo (int)$row['id']; ?>" class="btn">
+                     <i class="fas fa-edit"></i> Editar
+                  </a>
+                  <a href="admin_page.php?delete=<?php echo (int)$row['id']; ?>" class="btn">
+                     <i class="fas fa-trash"></i> Eliminar
+                  </a>
+               </td>
+               </tr>
+            <?php } ?>
+         </table>
+         </div>
 
 </div>
 

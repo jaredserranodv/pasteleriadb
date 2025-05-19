@@ -1,41 +1,71 @@
 <?php
 
-@include 'config.php';
+$conn = mysqli_connect('localhost', 'root', '', 'pasteleriadolceforno');
+
+if (!$conn) {
+    die("Error de conexión: " . mysqli_connect_error());
+}
+
 
 $id = $_GET['edit'];
 
 if(isset($_POST['update_product'])){
 
-   $product_name = $_POST['product_name'];
-   $product_price = $_POST['product_price'];
+   $id = $_POST['product_id']; // Asegúrate de que este campo esté presente en tu formulario
+
+   $product_name = mysqli_real_escape_string($conn, $_POST['product_name']);
+   $product_desc = mysqli_real_escape_string($conn, $_POST['product_desc']);
+   $product_price = floatval($_POST['product_price']);
+   $product_category = mysqli_real_escape_string($conn, $_POST['product_category']);
+   $product_quantity = intval($_POST['product_quantity']);
+
    $product_image = $_FILES['product_image']['name'];
    $product_image_tmp_name = $_FILES['product_image']['tmp_name'];
    $product_image_folder = 'uploaded_img/'.$product_image;
 
-    if(empty($product_name) || empty($product_price)){
-        $message[] = 'please fill out all!';
-    } else {
-        if(!empty($product_image)){
-        // con nueva imagen
-        $update_data = "UPDATE products SET name='$product_name', price='$product_price', image='$product_image' WHERE id = '$id'";
-        $upload = mysqli_query($conn, $update_data);
-        if($upload){
+   if(empty($product_name) || empty($product_desc) || empty($product_price) || empty($product_category) || empty($product_quantity)){
+      $message[] = 'Por favor llena todos los campos obligatorios';
+   } else {
+      if(!empty($product_image)){
+         // Con nueva imagen
+         $update_query = "UPDATE productos SET 
+            nombre = '$product_name',
+            descripcion = '$product_desc',
+            precio = $product_price,
+            categoria = '$product_category',
+            cantidad = $product_quantity,
+            imagen = '$product_image'
+            WHERE id = $id";
+
+         $upload = mysqli_query($conn, $update_query);
+
+         if($upload){
             move_uploaded_file($product_image_tmp_name, $product_image_folder);
-            header('location:admin_page.php');
-        } else {
+            header('Location: admin_page.php');
+            exit;
+         } else {
             $message[] = 'No se pudo actualizar el producto';
-        }
-        } else {
-        // sin nueva imagen
-        $update_data = "UPDATE products SET name='$product_name', price='$product_price' WHERE id = '$id'";
-        $upload = mysqli_query($conn, $update_data);
-        if($upload){
-            header('location:admin_page.php');
-        } else {
+         }
+      } else {
+         // Sin nueva imagen
+         $update_query = "UPDATE productos SET 
+            nombre = '$product_name',
+            descripcion = '$product_desc',
+            precio = $product_price,
+            categoria = '$product_category',
+            cantidad = $product_quantity
+            WHERE id = $id";
+
+         $upload = mysqli_query($conn, $update_query);
+
+         if($upload){
+            header('Location: admin_page.php');
+            exit;
+         } else {
             $message[] = 'No se pudo actualizar el producto';
-        }
-        }
-    }
+         }
+      }
+   }
 };
 
 ?>
@@ -59,34 +89,41 @@ if(isset($_POST['update_product'])){
 ?>
 
 <div class="container">
+      <div class="admin-product-form-container centered">
+         <?php
+                  
+            $select = mysqli_query($conn, "SELECT * FROM productos WHERE id = '$id'");
+            while($row = mysqli_fetch_assoc($select)){
 
+         ?>
+            <form action="" method="post" enctype="multipart/form-data">
+            <h3 class="title">Actualizar producto</h3>
 
-<div class="admin-product-form-container centered">
+            <!-- ID oculto -->
+            <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
 
-   <?php
+            <input type="text" class="box" name="product_name" value="<?php echo htmlspecialchars($row['nombre']); ?>" placeholder="Nombre del producto">
+
+            <textarea class="box" name="product_desc" placeholder="Descripción del producto"><?php echo htmlspecialchars($row['descripcion']); ?></textarea>
+
+            <input type="number" step="0.01" min="0" class="box" name="product_price" value="<?php echo $row['precio']; ?>" placeholder="Precio del producto">
+
+            <input type="text" class="box" name="product_category" value="<?php echo htmlspecialchars($row['categoria']); ?>" placeholder="Categoría del producto">
+
+            <input type="number" min="0" class="box" name="product_quantity" value="<?php echo $row['cantidad']; ?>" placeholder="Cantidad disponible">
+
+            <p>Imagen actual:</p>
+            <img src="uploaded_img/<?php echo $row['imagen']; ?>" height="100" alt="">
             
-      $select = mysqli_query($conn, "SELECT * FROM products WHERE id = '$id'");
-      while($row = mysqli_fetch_assoc($select)){
+            <input type="file" class="box" name="product_image" accept="image/png, image/jpeg, image/jpg">
 
-   ?>
-   
-   <form action="" method="post" enctype="multipart/form-data">
-      <h3 class="title">Actualizar producto</h3>
-      <input type="text" class="box" name="product_name" value="<?php echo $row['name']; ?>" placeholder="Ingresa el nombre del producto">
-      <input type="number" min="0" class="box" name="product_price" value="<?php echo $row['price']; ?>" placeholder="Ingresa el precio del producto">
-      <input type="file" class="box" name="product_image"  accept="image/png, image/jpeg, image/jpg">
-      <input type="submit" value="Actualizar producto" name="update_product" class="btn">
-      <a href="admin_page.php" class="btn">Regresar</a>
-   </form>
-   
+            <input type="submit" value="Actualizar producto" name="update_product" class="btn">
+            <a href="admin_page.php" class="btn">Regresar</a>
+         </form>
 
+         <?php }; ?>
 
-   <?php }; ?>
-
-   
-
-</div>
-
+      </div>
 </div>
 
 </body>
