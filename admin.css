@@ -200,8 +200,13 @@ header .img-container{
 }
 
 #carrito-img {
-    width: 30px;
-    height: 30px;
+   width: 30px;
+   height: 30px;
+}
+
+#usuario-img {
+   width: 30px;
+   height: 30px;
 }
 
 

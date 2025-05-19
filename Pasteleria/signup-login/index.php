@@ -30,7 +30,7 @@ if (isset($_SESSION["user_id"])) {
                 <nav>
                 <a href="../../index.html">Acerca de</a>
                 <a href="../../index.html">Menú</a>
-                <a href="#">Pedidos</a>
+                <a href="../../Pasteleria/signup-login/mispedidos.php">Pedidos</a>
                 <a href="../../galeria.html">Galería</a>
                 <a href="../../index.html">Reseñas</a>
                     <a href="../../carrito.html"> <img src="../carrito.png" alt="carrito" id="carrito-img"></a>
@@ -99,9 +99,13 @@ if (isset($_SESSION["user_id"])) {
     <ul>
         <?php if (isset($user)): ?>
             <li><strong><?= htmlspecialchars($user["name"]) ?></strong></li>
+                 <!-- Link solo para admin -->
+                 <?php if ($user["user_type"] == 1): ?>
+                <li><a href="../../admin_page.php">Panel de Administrador</a></li>
+                <?php endif; ?>
             <li><a href="#">Editar perfil</a></li>
             <li><a href="#">Cambiar contraseña</a></li>
-            <li><a href="#">Mis pedidos</a></li>
+            <li><a href="mispedidos.php">Mis pedidos</a></li>
             <li><a href="perfilguardado.php">Mi informacion</a></li>
             <li><a href="logout.php">Cerrar sesión</a></li>
         <?php else: ?>
@@ -109,7 +113,7 @@ if (isset($_SESSION["user_id"])) {
             <li><a href="signup.html">Registrarse</a></li>
         <?php endif; ?>
     </ul>
-    </aside>
+</aside>
 </div>
 
 
