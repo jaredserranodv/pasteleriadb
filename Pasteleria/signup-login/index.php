@@ -100,7 +100,21 @@ if (isset($_SESSION["user_id"])) {
         <?php if (isset($user)): ?>
             <li><strong><?= htmlspecialchars($user["name"]) ?></strong></li>
                  <!-- Link solo para admin -->
-                 <?php if ($user["user_type"] == 1): ?>
+                 <?php
+                $user_id = $_SESSION["user_id"] ?? null;
+                $esEmpleado = false;
+
+                if ($user_id) {
+                    $stmt = $mysqli->prepare("SELECT 1 FROM empleado WHERE id = ?");
+                    $stmt->bind_param("i", $user_id);
+                    $stmt->execute();
+                    $stmt->store_result();
+                    $esEmpleado = $stmt->num_rows > 0;
+                    $stmt->close();
+                }
+                ?>
+                
+                <?php if ($esEmpleado): ?>
                 <li><a href="../../admin_page.php">Panel de Administrador</a></li>
                 <?php endif; ?>
             <li><a href="#">Editar perfil</a></li>

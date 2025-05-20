@@ -317,6 +317,15 @@ header .img-container{
       margin-top: 20px;
       line-height: 1.6;
   }
+
+  form {
+   margin-top: 15px;
+}
+
+form select, form button {
+   padding: 5px 10px;
+   margin-left: 10px;
+}
   
 
 

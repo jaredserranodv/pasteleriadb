@@ -1,11 +1,32 @@
 <?php
+session_start();
+
+if (!isset($_SESSION["user_id"])) {
+    // Si no hay sesión iniciada, redirige a login
+    header("Location: ../Pasteleria/signup-login/login.php");
+    exit;
+}
 
 $conn = mysqli_connect('localhost', 'root', '', 'pasteleriadolceforno');
 
 if (!$conn) {
     die("Error de conexión: " . mysqli_connect_error());
 }
+$user_id = $_SESSION["user_id"];
 
+// Verificar si el usuario es empleado (admin)
+$stmt = $conn->prepare("SELECT 1 FROM empleado WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->store_result();
+
+if ($stmt->num_rows === 0) {
+    // No es empleado => no es admin => acceso denegado
+    header("Location: ../Pasteleria/signup-login/login.php");
+    exit;
+}
+
+$stmt->close();
 
 if(isset($_POST['add_product'])){
 
@@ -66,7 +87,7 @@ if(isset($_GET['delete'])){
 </head>
 <body>
 
-<header>
+      <header>
             <div class="header-container">
             <a href="index.html"> <div class="img-container"></div> </a>
             <nav>

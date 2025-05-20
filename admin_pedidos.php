@@ -1,12 +1,41 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["user_id"]) || $_SESSION["user_type"] != 1) {
-    header("Location: login.php");
+if (!isset($_SESSION["user_id"])) {
+    header("Location: ../Pasteleria/signup-login/login.php");
     exit;
 }
 
-if ($_SESSION["user_type"] != 1) {
+// Conexión a la base de datos
+$conn = new mysqli('localhost', 'root', '', 'pasteleriadolceforno');
+
+// Verifica si hubo error en la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+$user_id = $_SESSION["user_id"];
+
+// Verificar si el usuario es empleado (admin)
+$stmt = $conn->prepare("SELECT 1 FROM empleado WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->store_result();
+
+if ($stmt->num_rows === 0) {
+    // No es empleado => acceso denegado
+    header("Location: ../Pasteleria/signup-login/login.php");
+    exit;
+} else {
+    // Sí es empleado => asignamos user_type = 1 (admin)
+    $_SESSION["user_type"] = 1;
+}
+
+
+$stmt->close();
+
+// (Opcional) Verificación de tipo de usuario, si manejas roles
+if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] != 1) {
     echo "Acceso denegado. No tienes permisos para ver esta página.";
     exit;
 }
@@ -17,9 +46,9 @@ $username = 'root';
 $password = '';
 
 try {
-    // Crear conexión PDO
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 
     $stmt = $conn->prepare("
         SELECT 
@@ -160,6 +189,16 @@ try {
                         <?= htmlspecialchars($pedido['direccion']['ciudad']) ?>, <?= htmlspecialchars($pedido['direccion']['estado']) ?>
                     </p>
                     <h3>Total del pedido: $<?= number_format($totalPedido, 2) ?></h3>
+                    <form method="POST" action="editar_pedido.php">
+                        <input type="hidden" name="pedido_id" value="<?= htmlspecialchars($pedido_id) ?>">
+                        <select name="estatus" id="estatus">
+                            <option value="Pendiente" <?= $pedido['estatus'] == 'Pendiente' ? 'selected' : '' ?>>Pendiente</option>
+                            <option value="En proceso" <?= $pedido['estatus'] == 'En proceso' ? 'selected' : '' ?>>En proceso</option>
+                            <option value="Entregado" <?= $pedido['estatus'] == 'Entregado' ? 'selected' : '' ?>>Entregado</option>
+                        </select>
+                        <button type="submit">Actualizar</button>
+                    </form>
+
                 </div>
             </div>
 
