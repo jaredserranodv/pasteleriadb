@@ -88,98 +88,115 @@ if(isset($_GET['delete'])){
 <body>
 
       <header>
-            <div class="header-container">
-            <a href="index.html"> <div class="img-container"></div> </a>
-            <nav>
+        <div class="navbar-container">
+            <a href="index.html" class="logo-text">Dolce Forno</a>
+            <nav class="navbar">
                 <a href="#acerca-de">Acerca de</a>
                 <a href="#menu">Menú</a>
                 <a href="../Pasteleria_DB/Pasteleria/signup-login/mispedidos.php">Pedidos</a>
                 <a href="galeria.html">Galería</a>
                 <a href="#reseñas">Reseñas</a>
-                <a href="carrito.html"> <img src="Pasteleria/carrito.png" alt="carrito" id="carrito-img"></a>
-                <a href="Pasteleria/signup-login/login.php"> <img src="Pasteleria/usuario.png" alt="usuario" id="usuario-img"></a>
+                <a href="carrito.html" class="icon-link">
+                    <img src="Pasteleria/carrito.png" alt="Carrito" id="carrito-img">
+                </a>
+                <a href="Pasteleria/signup-login/login.php" class="icon-link">
+                    <img src="Pasteleria/usuario.png" alt="Usuario" id="usuario-img">
+                </a>
             </nav>
-            </div>
+        </div>
     </header>
 
-<?php
-if(isset($message)){
-   foreach($message as $message){
-      echo '<span class="message">'.$message.'</span>';
-   }
-}
-?>
+    <div class="admin-container">
+   <aside class="sidebar">
+      <h2>Panel Admin</h2>
+      <a href="../Pasteleria_DB/admin_pedidos.php">📦 Ver pedidos</a>
+      <a href="../Pasteleria_DB/verempleados.php">👥 Ver empleados</a>
+      <a href="../Pasteleria_DB/ver_reseñas.php">⭐ Ver reseñas</a>
+      <a href="admin_page.php?add=1" class="add-product-btn">➕ Agregar producto</a>
+   </aside>
 
-   <?php
+   <main class="admin-main-content">
+      <?php
+      if(isset($message)){
+         foreach($message as $message){
+            echo '<span class="message">'.$message.'</span>';
+         }
+      }
+      ?>
 
-   $select = mysqli_query($conn, "SELECT * FROM productos");
-   
-   ?>
-         <div class="product-display">
-            <div class="tituloinventario"><h2>Inventario</h2></div>
-         <table class="product-display-table">
-            <thead>
-               <tr>
-               <th>Imagen</th>
-               <th>Nombre del producto</th>
-               <th>Descripción</th>
-               <th>Categoría</th>
-               <th>Cantidad</th>
-               <th>Precio</th>
-               <th>Acción</th>
-               </tr>
-            </thead>
-            <?php while($row = mysqli_fetch_assoc($select)){ ?>
-               <tr>
-               <td><img src="images/<?php echo htmlspecialchars($row['imagen']); ?>" height="100" alt=""></td>
-               <td><?php echo htmlspecialchars($row['nombre']); ?></td>
-               <td><?php echo htmlspecialchars($row['descripcion']); ?></td>
-               <td><?php echo htmlspecialchars($row['categoria']); ?></td>
-               <td><?php echo (int)$row['cantidad']; ?></td>
-               <td>$<?php echo number_format($row['precio'], 2); ?></td>
-               <td>
-                  <a href="admin_update.php?edit=<?php echo (int)$row['id']; ?>" class="btn">
-                     <i class="fas fa-edit"></i> Editar
-                  </a>
-                  <a href="admin_page.php?delete=<?php echo (int)$row['id']; ?>" class="btn">
-                     <i class="fas fa-trash"></i> Eliminar
-                  </a>
-               </td>
-               </tr>
-            <?php } ?>
-         </table>
-         </div>
-               <a href="admin_page.php?add=1" class="btn">Agregar producto</a>
-               <a href="../Pasteleria_DB/admin_pedidos.php" class="btn btn-view-orders">Ver pedidos</a>
-               <a href="../Pasteleria_DB/verempleados.php" class="btn btn-view-orders">Ver empleados</a>
-               <a href="../Pasteleria_DB/ver_reseñas.php" class="btn btn-view-orders">Ver reseñas</a>
+         <?php
 
-
-               <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
-               <div class="modal-overlay">
-               <div class="modal-content">
-                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-                     <h3>Añadir un nuevo producto</h3>
-                     <input type="text" name="product_name" placeholder="Ingresa el nombre del producto" class="box" required>
-                     <textarea name="product_desc" placeholder="Ingresa la descripción del producto" class="box" required></textarea>
-                     <input type="number" step="0.01" name="product_price" placeholder="Ingresa el precio del producto" class="box" required>
-                     <input type="text" name="product_category" placeholder="Ingresa la categoría del producto" class="box" required>
-                     <input type="number" name="product_quantity" placeholder="Ingresa la cantidad disponible" class="box" required>
-                     <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box" required>
-                     <input type="submit" class="btn" name="add_product" value="Añadir producto">
-                     <a href="admin_page.php" class="btn btn-cancel">Cancelar</a>
-                  </form>
+         $select = mysqli_query($conn, "SELECT * FROM productos");
+         
+         ?>
+               <div class="product-display">
+                  <div class="tituloinventario"><h2>Inventario</h2></div>
+               <table class="product-display-table">
+                  <thead>
+                     <tr>
+                     <th>Imagen</th>
+                     <th>Nombre del producto</th>
+                     <th>Descripción</th>
+                     <th>Categoría</th>
+                     <th>Cantidad</th>
+                     <th>Precio</th>
+                     <th>Acción</th>
+                     </tr>
+                  </thead>
+                  <?php while($row = mysqli_fetch_assoc($select)){ ?>
+                     <tr>
+                     <td><img src="images/<?php echo htmlspecialchars($row['imagen']); ?>" height="100" alt=""></td>
+                     <td><?php echo htmlspecialchars($row['nombre']); ?></td>
+                     <td><?php echo htmlspecialchars($row['descripcion']); ?></td>
+                     <td><?php echo htmlspecialchars($row['categoria']); ?></td>
+                     <td><?php echo (int)$row['cantidad']; ?></td>
+                     <td>$<?php echo number_format($row['precio'], 2); ?></td>
+                     <td>
+                        <a href="admin_update.php?edit=<?php echo (int)$row['id']; ?>" class="btn">
+                           <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="admin_page.php?delete=<?php echo (int)$row['id']; ?>" class="btn">
+                           <i class="fas fa-trash"></i> Eliminar
+                        </a>
+                     </td>
+                     </tr>
+                  <?php } ?>
+               </table>
                </div>
-               </div>
-               <?php endif; ?>
+               <!-- Botones de acción 
+                     <a href="admin_page.php?add=1" class="btn">Agregar producto</a>
+                     <a href="../Pasteleria_DB/admin_pedidos.php" class="btn btn-view-orders">Ver pedidos</a>
+                     <a href="../Pasteleria_DB/verempleados.php" class="btn btn-view-orders">Ver empleados</a>
+                     <a href="../Pasteleria_DB/ver_reseñas.php" class="btn btn-view-orders">Ver reseñas</a>
+                     -->
 
-            <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
+                     <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
+                     <div class="modal-overlay">
+                     <div class="modal-content">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                           <h3>Añadir un nuevo producto</h3>
+                           <input type="text" name="product_name" placeholder="Ingresa el nombre del producto" class="box" required>
+                           <textarea name="product_desc" placeholder="Ingresa la descripción del producto" class="box" required></textarea>
+                           <input type="number" step="0.01" name="product_price" placeholder="Ingresa el precio del producto" class="box" required>
+                           <input type="text" name="product_category" placeholder="Ingresa la categoría del producto" class="box" required>
+                           <input type="number" name="product_quantity" placeholder="Ingresa la cantidad disponible" class="box" required>
+                           <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box" required>
+                           <input type="submit" class="btn" name="add_product" value="Añadir producto">
+                           <a href="admin_page.php" class="btn btn-cancel">Cancelar</a>
+                        </form>
+                     </div>
+                     </div>
+                     <?php endif; ?>
 
-         <a href="admin_page.php" class="btn">Cancelar</a>
-            <?php endif; ?>
+                  <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
+
+               <a href="admin_page.php" class="btn">Cancelar</a>
+                  <?php endif; ?>
 
 
-</div>
+      </div>
+   </main>
+   </div>
 
 
 </body>

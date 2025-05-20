@@ -8,6 +8,5 @@ $stmt = $pdo->prepare("
   JOIN user_info ui ON u.id = ui.user_id
   WHERE u.id = ?
 ");
-
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));

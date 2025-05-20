@@ -42,20 +42,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <header>
-            <div class="container">
-                <a href="../../index.html"> <div class="img-container"></div> </a>
-                <nav>
+      <header>
+        <div class="navbar-container">
+            <a href="../../index.html" class="logo-text">Dolce Forno</a>
+            <nav class="navbar">
                 <a href="../../index.html">Acerca de</a>
                 <a href="../../index.html">Menú</a>
                 <a href="#">Pedidos</a>
                 <a href="../../galeria.html">Galería</a>
                 <a href="../../index.html">Reseñas</a>
-                    <a href="../../carrito.html"> <img src="../carrito.png" alt="carrito" id="carrito-img"></a>
-                    <a href="/Pasteleria/signup-login/login.php"> <img src="../usuario.png" alt="usuario" id="usuario-img"></a>
-                </nav>
-            </div>  
-    </header>
+                <a href="../../carrito.html" class="icon-link">
+                    <img src="../carrito.png" alt="Carrito" id="carrito-img">
+                </a>
+                <a href="../../Pasteleria/signup-login/login.php" class="icon-link">
+                    <img src="../usuario.png" alt="Usuario" id="usuario-img">
+                </a>
+            </nav>
+        </div>
+      </header>
 
     <section id="cuenta">
   <div class="container login-container">

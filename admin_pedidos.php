@@ -140,18 +140,22 @@ try {
 </head>
 <body>
     <header>
-            <div class="header-container">
-            <a href="index.html"> <div class="img-container"></div> </a>
-            <nav>
+        <div class="navbar-container">
+            <a href="index.html" class="logo-text">Dolce Forno</a>
+            <nav class="navbar">
                 <a href="#acerca-de">Acerca de</a>
                 <a href="#menu">Menú</a>
                 <a href="../Pasteleria_DB/Pasteleria/signup-login/mispedidos.php">Pedidos</a>
                 <a href="galeria.html">Galería</a>
                 <a href="#reseñas">Reseñas</a>
-                <a href="carrito.html"> <img src="Pasteleria/carrito.png" alt="carrito" id="carrito-img"></a>
-                <a href="Pasteleria/signup-login/login.php"> <img src="Pasteleria/usuario.png" alt="usuario" id="usuario-img"></a>
+                <a href="carrito.html" class="icon-link">
+                    <img src="Pasteleria/carrito.png" alt="Carrito" id="carrito-img">
+                </a>
+                <a href="Pasteleria/signup-login/login.php" class="icon-link">
+                    <img src="Pasteleria/usuario.png" alt="Usuario" id="usuario-img">
+                </a>
             </nav>
-            </div>
+        </div>
     </header>
         <div class="titulo-pedidos"><h1>Todos los Pedidos</h1></div>
     <?php if (empty($pedidos)): ?>
