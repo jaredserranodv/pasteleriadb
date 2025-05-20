@@ -151,6 +151,9 @@ if(isset($message)){
          </div>
                <a href="admin_page.php?add=1" class="btn">Agregar producto</a>
                <a href="../Pasteleria_DB/admin_pedidos.php" class="btn btn-view-orders">Ver pedidos</a>
+               <a href="../Pasteleria_DB/verempleados.php" class="btn btn-view-orders">Ver empleados</a>
+               <a href="../Pasteleria_DB/ver_reseñas.php" class="btn btn-view-orders">Ver reseñas</a>
+
 
                <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
                <div class="modal-overlay">
