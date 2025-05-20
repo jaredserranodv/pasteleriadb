@@ -34,7 +34,7 @@ if (isset($_SESSION["user_id"])) {
                 <a href="../../galeria.html">Galería</a>
                 <a href="../../index.html">Reseñas</a>
                     <a href="../../carrito.html"> <img src="../carrito.png" alt="carrito" id="carrito-img"></a>
-                    <a href="/Pasteleria/signup-login/login.php"> <img src="../usuario.png" alt="usuario" id="usuario-img"></a>
+                    <a href="../signup-login/index.php"> <img src="../usuario.png" alt="usuario" id="usuario-img"></a>
                 </nav>
             </div>  
     </header>

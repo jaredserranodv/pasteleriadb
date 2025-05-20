@@ -89,31 +89,13 @@ if(isset($message)){
 }
 ?>
 
-
-   
-<div class="container">
-
-   <div class="admin-product-form-container">
-
-         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-      <h3>Añadir un nuevo producto</h3>
-      <input type="text" name="product_name" placeholder="Ingresa el nombre del producto" class="box" required>
-      <textarea name="product_desc" placeholder="Ingresa la descripción del producto" class="box" required></textarea>
-      <input type="number" step="0.01" name="product_price" placeholder="Ingresa el precio del producto" class="box" required>
-      <input type="text" name="product_category" placeholder="Ingresa la categoría del producto" class="box" required>
-      <input type="number" name="product_quantity" placeholder="Ingresa la cantidad disponible" class="box" required>
-      <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box" required>
-      <input type="submit" class="btn" name="add_product" value="Añadir producto">
-      </form>
-
-   </div>
-
    <?php
 
    $select = mysqli_query($conn, "SELECT * FROM productos");
    
    ?>
          <div class="product-display">
+            <div class="tituloinventario"><h2>Inventario</h2></div>
          <table class="product-display-table">
             <thead>
                <tr>
@@ -146,6 +128,32 @@ if(isset($message)){
             <?php } ?>
          </table>
          </div>
+               <a href="admin_page.php?add=1" class="btn">Agregar producto</a>
+               <a href="../Pasteleria_DB/admin_pedidos.php" class="btn btn-view-orders">Ver pedidos</a>
+
+               <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
+               <div class="modal-overlay">
+               <div class="modal-content">
+                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                     <h3>Añadir un nuevo producto</h3>
+                     <input type="text" name="product_name" placeholder="Ingresa el nombre del producto" class="box" required>
+                     <textarea name="product_desc" placeholder="Ingresa la descripción del producto" class="box" required></textarea>
+                     <input type="number" step="0.01" name="product_price" placeholder="Ingresa el precio del producto" class="box" required>
+                     <input type="text" name="product_category" placeholder="Ingresa la categoría del producto" class="box" required>
+                     <input type="number" name="product_quantity" placeholder="Ingresa la cantidad disponible" class="box" required>
+                     <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box" required>
+                     <input type="submit" class="btn" name="add_product" value="Añadir producto">
+                     <a href="admin_page.php" class="btn btn-cancel">Cancelar</a>
+                  </form>
+               </div>
+               </div>
+               <?php endif; ?>
+
+            <?php if (isset($_GET['add']) && $_GET['add'] == 1): ?>
+
+         <a href="admin_page.php" class="btn">Cancelar</a>
+            <?php endif; ?>
+
 
 </div>
 

@@ -16,13 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
     if ($user) {
         
-        if (password_verify($_POST["password"], $user["password_hash"])) {
-            
+          if (password_verify($_POST["password"], $user["password_hash"])) {
+
             session_start();
             
             session_regenerate_id();
             
             $_SESSION["user_id"] = $user["id"];
+            $_SESSION["user_type"] = $user["user_type"]; // <- ESTA LÍNEA
             
             header("Location: index.php");
             exit;
