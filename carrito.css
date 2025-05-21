@@ -25,9 +25,7 @@ img{
 }
 
 
-.compras{
-    margin: 20px;
-}
+
 
 .product-list{
     padding: 50px 0;
@@ -119,7 +117,7 @@ button:hover{
 
 
 .container{
-    max-width: 1600px;
+    max-width: 1900px;
     margin: auto;
 }
 
@@ -184,6 +182,73 @@ header {
     padding: 4px;
 }
 
+.compras {
+    width: 1500px;
+    margin: 40px auto;
+    padding: 20px 40px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+#product-list,
+#cart-items {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 25px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+
+.form-pago {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #eef3f7;
+    border: 1px solid #cbd6e2;
+    border-radius: 8px;
+}
+
+.form-pago select,
+.tarjeta-inputs input {
+    display: block;
+    width: 400px;
+    max-width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.tarjeta-inputs {
+    margin-top: 15px;
+}
+
+.boton-accion {
+    margin-top: 25px;
+    padding: 10px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.boton-accion:hover {
+    background-color: #0069d9;
+}
+
+h1, h2, h3 {
+    margin-bottom: 15px;
+}
+
+
+
+
 
 
 @media (max-width: 768px) {
@@ -243,4 +308,6 @@ body{
     margin: 0;
     background-color: rgb(255, 255, 255);
 }
+
+
 }

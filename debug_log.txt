@@ -1,0 +1,15 @@
+Entró al archivo
+Entró al archivo
+Entró al archivo
+Entró al archivo
+Entró al archivo
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Método no encontrado en DB
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Método no encontrado en DB
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Entró al archivo
+Método de pago recibido: 'tarjeta'

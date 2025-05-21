@@ -26,26 +26,38 @@
         </div>
     </header>
 
-    <section class="compras">
-
-        <h1>Carrito de compras</h1>
-
-        <div id="product-list" class="product-list">
-
-
-        </div>
-
-        <h2>Tu carrito</h2>
-        <div id="cart-items">
-            <p>Tu carrito está vacío</p>
-
-        </div>
-
-        <h3>Total: $<span id="cart-total">0</span></h3>
-
-
-        <button id="checkout">Procesar compra</button>
-    </section>
+        <section class="compras">
+            <h1>Carrito de compras</h1>
+        
+            <div id="product-list" class="product-list"></div>
+        
+            <h2>Tu carrito</h2>
+            <div id="cart-items">
+                <p>Tu carrito está vacío</p>
+            </div>
+        
+            <h3>Total: $<span id="cart-total">0</span></h3>
+        
+            <div id="payment-form" style="display:none;" class="form-pago">
+                <h3>Selecciona método de pago</h3>
+                <select id="metodoPago">
+                    <option value="tarjeta">Tarjeta</option>
+                    <option value="efectivo">Efectivo</option>
+                </select>
+        
+                <div id="tarjeta-fields" class="tarjeta-inputs">
+                    <input type="text" id="numeroTarjeta" placeholder="Número de tarjeta">
+                    <input type="text" id="nombreTarjeta" placeholder="Nombre en la tarjeta">
+                    <input type="text" id="fechaExpiracion" placeholder="MM/AA">
+                    <input type="text" id="cvv" placeholder="CVV">
+                </div>
+        
+                <button id="confirmarCompra" class="boton-accion">Confirmar compra</button>
+            </div>
+        
+            <button id="checkout" class="boton-accion">Procesar compra</button>
+        </section>
+    
 
     <script src="carrito.js"></script>
 </body>

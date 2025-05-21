@@ -1,0 +1,20 @@
+{
+    "carrito": [
+        {
+            "id": 5,
+            "nombre": "Pastel ejecutivo",
+            "descripcion": "Pastel elegante para reuniones corporativas.",
+            "precio": "1100.00",
+            "cantidad": 1,
+            "categoria": "Evento",
+            "imagen": "ejecutivo.jpg"
+        }
+    ],
+    "metodo_pago": "tarjeta",
+    "datos_pago": {
+        "numeroTarjeta": "4111111111111111",
+        "nombreTarjeta": "Juan Perez",
+        "fechaExpiracion": "1228",
+        "cvv": "342"
+    }
+}

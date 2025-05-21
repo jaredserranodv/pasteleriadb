@@ -97,24 +97,94 @@ function addToCart(product) {
 
 
 document.getElementById('checkout').addEventListener('click', () => {
-    if(cart.length === 0) {
+    if (cart.length === 0) {
         alert('El carrito está vacío.');
         return;
     }
-    fetch('procesar_compra.php', {
 
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body:JSON.stringify(cart)
-    }).then(response => response.json())
-      .then(data => {
-        alert(data.message);
-        cart = [];
-        updateCart();
-      });
+    // Mostrar formulario de pago
+    document.getElementById('payment-form').style.display = 'block';
 });
+
+document.getElementById('metodoPago').addEventListener('change', (e) => {
+    const tarjetaFields = document.getElementById('tarjeta-fields');
+    if (e.target.value === 'efectivo') {
+        tarjetaFields.style.display = 'none';
+    } else {
+        tarjetaFields.style.display = 'block';
+    }
+});
+
+document.getElementById('confirmarCompra').addEventListener('click', (e) => {
+    e.preventDefault(); // evita recarga
+
+    console.log('Confirmar compra presionado');
+
+    const metodoPago = document.getElementById('metodoPago').value;
+    console.log('Método de pago:', metodoPago);
+
+    let datosPago = {};
+    if (metodoPago === 'tarjeta') {
+        datosPago = {
+            numeroTarjeta: document.getElementById('numeroTarjeta').value.trim(),
+            nombreTarjeta: document.getElementById('nombreTarjeta').value.trim(),
+            fechaExpiracion: document.getElementById('fechaExpiracion').value.trim(),
+            cvv: document.getElementById('cvv').value.trim(),
+        };
+
+        console.log('Datos de tarjeta:', datosPago);
+
+        if (!datosPago.numeroTarjeta || !datosPago.nombreTarjeta || !datosPago.fechaExpiracion || !datosPago.cvv) {
+            alert('Por favor completa todos los campos de la tarjeta.');
+            return;
+        }
+    }
+
+    if (cart.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+    }
+
+    console.log('Enviando carrito:', cart);
+
+    fetch('procesar_compra.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            carrito: cart,
+            metodo_pago: metodoPago,
+            datos_pago: datosPago
+        })
+    })
+    .then(response => {
+        console.log('Respuesta recibida, status:', response.status);
+        return response.text(); // Cambia a text() para ver el contenido crudo
+    })
+    .then(text => {
+        console.log('Respuesta cruda:', text);
+        try {
+            const data = JSON.parse(text);
+            console.log('Respuesta JSON:', data);
+            alert(data.message);
+            if (data.message === 'Compra procesada correctamente') {
+                cart = [];
+                updateCart();
+                document.getElementById('payment-form').style.display = 'none';
+            }
+        } catch (e) {
+            console.error('Error al parsear JSON:', e);
+            alert('Respuesta inválida del servidor');
+        }
+    })
+    .catch(error => {
+        console.error('Error en fetch:', error);
+        alert('Error al procesar la compra');
+    });
+    
+});
+
+
+
 
 
 loadProducts();

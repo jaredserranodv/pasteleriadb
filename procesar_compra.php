@@ -1,100 +1,150 @@
 <?php
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if (!isset($_SESSION["user_id"])) {
-    http_response_code(401); // No autorizado
-    echo json_encode(['message' => 'Usuario no autenticado.']);
+// Evita que se mande salida antes de tiempo
+ob_start();
+header('Content-Type: application/json');
+
+// LOG para confirmar entrada
+file_put_contents('debug_log.txt', "Entró al archivo\n", FILE_APPEND);
+
+// Verifica que sea POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    ob_clean();
+    echo json_encode(['message' => 'Método no permitido']);
     exit;
 }
 
-$host = 'localhost';
-$dbname = 'pasteleriadolceforno';
-$username = 'root';
-$password = '';
+$input = json_decode(file_get_contents('php://input'), true);
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Guarda el input recibido para debug
+file_put_contents('debug_carrito.json', json_encode($input, JSON_PRETTY_PRINT));
 
-    $user_id = $_SESSION["user_id"];
-
-    // Obtener el ID de user_info
-    $stmtInfo = $conn->prepare("SELECT id FROM user_info WHERE user_id = :user_id");
-    $stmtInfo->bindParam(':user_id', $user_id);
-    $stmtInfo->execute();
-    $userInfo = $stmtInfo->fetch(PDO::FETCH_ASSOC);
-
-    if (!$userInfo) {
-        echo json_encode(['message' => 'No se encontró dirección de envío para este usuario.']);
-        exit;
-    }
-
-    $user_info_id = $userInfo['id'];
-
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    if ($data && count($data) > 0) {
-        $conn->beginTransaction();
-
-        // Insertar pedido general
-        $fechaCompra = date("Y-m-d H:i:s");
-        $estatus = 'Pendiente';
-
-        $stmtPedido = $conn->prepare("
-            INSERT INTO pedido (user_id, user_info_id, fecha_compra, estatus) 
-            VALUES (:user_id, :user_info_id, :fecha_compra, :estatus)
-        ");
-        $stmtPedido->bindParam(':user_id', $user_id);
-        $stmtPedido->bindParam(':user_info_id', $user_info_id);
-        $stmtPedido->bindParam(':fecha_compra', $fechaCompra);
-        $stmtPedido->bindParam(':estatus', $estatus);
-        $stmtPedido->execute();
-
-        $pedido_id = $conn->lastInsertId();
-
-        $stmtDetalle = $conn->prepare("
-            INSERT INTO detalle_pedido (pedido_id, producto_id, cantidad, precio_unitario, subtotal) 
-            VALUES (:pedido_id, :producto_id, :cantidad, :precio_unitario, :subtotal)
-        ");
-
-        $total = 0;
-
-        foreach ($data as $item) {
-            $producto_id = $item['id'];
-            $cantidad = isset($item['cantidad']) ? $item['cantidad'] : 1;
-            $precio_unitario = $item['precio'];
-            $subtotal = $cantidad * $precio_unitario;
-
-            $stmtDetalle->bindParam(':pedido_id', $pedido_id);
-            $stmtDetalle->bindParam(':producto_id', $producto_id);
-            $stmtDetalle->bindParam(':cantidad', $cantidad);
-            $stmtDetalle->bindParam(':precio_unitario', $precio_unitario);
-            $stmtDetalle->bindParam(':subtotal', $subtotal);
-
-            $stmtDetalle->execute();
-
-            $total += $subtotal;
-        }
-
-        // Actualizar total en pedido
-        $stmtUpdateTotal = $conn->prepare("UPDATE pedido SET total = :total WHERE id = :pedido_id");
-        $stmtUpdateTotal->bindParam(':total', $total);
-        $stmtUpdateTotal->bindParam(':pedido_id', $pedido_id);
-        $stmtUpdateTotal->execute();
-
-        $conn->commit();
-
-        echo json_encode(['message' => 'Compra procesada con éxito.', 'pedido_id' => $pedido_id, 'total' => $total]);
-
-    } else {
-        echo json_encode(['message' => 'No se recibieron datos.']);
-    }
-
-} catch (PDOException $e) {
-    if ($conn->inTransaction()) {
-        $conn->rollBack();
-    }
-    http_response_code(500);
-    echo json_encode(['message' => 'Error en la base de datos: ' . $e->getMessage()]);
+if (!$input) {
+    ob_clean();
+    echo json_encode(['message' => 'No se recibió JSON o está mal formado']);
+    exit;
 }
+if (!isset($input['carrito'])) {
+    ob_clean();
+    echo json_encode(['message' => 'No se recibió carrito']);
+    exit;
+}
+if (!isset($input['metodo_pago'])) {
+    ob_clean();
+    echo json_encode(['message' => 'No se recibió metodo_pago']);
+    exit;
+}
+
+// Conexión a base de datos
+$conn = new mysqli('localhost', 'root', '', 'pasteleriadolceforno');
+if ($conn->connect_error) {
+    ob_clean();
+    echo json_encode(['message' => 'Error de conexión a la base de datos']);
+    exit;
+}
+
+$carrito = $input['carrito'];
+$metodoPago = $conn->real_escape_string($input['metodo_pago']);
+$datosPago = $input['datos_pago'] ?? [];
+
+session_start();
+$user_id = $_SESSION['user_id'] ?? null;
+
+if (!$user_id) {
+    ob_clean();
+    echo json_encode(['message' => 'Usuario no autenticado']);
+    exit;
+}
+
+// Determinar ID de método de pago
+$metodoPago = strtolower(trim($input['metodo_pago']));
+file_put_contents('debug_log.txt', "Método de pago recibido: '$metodoPago'\n", FILE_APPEND);
+
+$queryMetodo = $conn->prepare("SELECT id FROM metodo_pago WHERE LOWER(nombre) = ?");
+$queryMetodo->bind_param("s", $metodoPago);
+$queryMetodo->execute();
+$resultMetodo = $queryMetodo->get_result();
+
+if ($resultMetodo->num_rows === 0) {
+    file_put_contents('debug_log.txt', "Método no encontrado en DB\n", FILE_APPEND);
+    ob_clean();
+    echo json_encode(['message' => 'Método de pago no válido']);
+    exit;
+}
+
+$metodo_pago_id = $resultMetodo->fetch_assoc()['id'];
+
+
+// Obtener dirección de entrega
+$sqlUserInfo = "SELECT id FROM user_info WHERE user_id = $user_id LIMIT 1";
+$resUserInfo = $conn->query($sqlUserInfo);
+if (!$resUserInfo || $resUserInfo->num_rows === 0) {
+    ob_clean();
+    echo json_encode(['message' => 'Información de entrega no encontrada']);
+    exit;
+}
+$user_info_id = $resUserInfo->fetch_assoc()['id'];
+
+// Calcular total
+$total = 0;
+foreach ($carrito as $item) {
+    $total += $item['precio'] * $item['cantidad'];
+}
+
+// Insertar pedido
+$stmtPedido = $conn->prepare("INSERT INTO pedido (user_id, user_info_id, fecha_compra, estatus, total, metodo_pago_id) VALUES (?, ?, NOW(), 'pendiente', ?, ?)");
+$stmtPedido->bind_param("iidi", $user_id, $user_info_id, $total, $metodo_pago_id);
+
+if (!$stmtPedido->execute()) {
+    ob_clean();
+    echo json_encode(['message' => 'Error al guardar el pedido']);
+    exit;
+}
+$pedido_id = $stmtPedido->insert_id;
+
+// Insertar productos del carrito al detalle del pedido
+$stmtDetalle = $conn->prepare("INSERT INTO detalle_pedido (pedido_id, producto_id, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)");
+foreach ($carrito as $item) {
+    $subtotal = $item['precio'] * $item['cantidad'];
+    $stmtDetalle->bind_param("iiidd", $pedido_id, $item['id'], $item['cantidad'], $item['precio'], $subtotal);
+    $stmtDetalle->execute();
+}
+
+// Si es pago con tarjeta, guardar detalles
+if ($metodoPago === 'tarjeta') {
+    $nombreTarjeta = $conn->real_escape_string($datosPago['nombreTarjeta'] ?? '');
+    $referencia = substr(md5($datosPago['numeroTarjeta'] ?? ''), 0, 8);
+    $stmtPago = $conn->prepare("INSERT INTO pago_tarjeta (pedido_id, referencia, nombre) VALUES (?, ?, ?)");
+    $stmtPago->bind_param("iss", $pedido_id, $referencia, $nombreTarjeta);
+    $stmtPago->execute();
+}
+
+// Obtener resumen de productos
+$resumen = [];
+$stmtResumen = $conn->prepare("
+    SELECT p.nombre, dp.cantidad, dp.precio_unitario, dp.subtotal
+    FROM detalle_pedido dp
+    JOIN productos p ON p.id = dp.producto_id
+    WHERE dp.pedido_id = ?
+");
+$stmtResumen->bind_param("i", $pedido_id);
+$stmtResumen->execute();
+$result = $stmtResumen->get_result();
+while ($row = $result->fetch_assoc()) {
+    $resumen[] = $row;
+}
+
+// Limpia todo lo que se haya enviado antes y envía el JSON final
+ob_clean();
+echo json_encode([
+    'message' => 'Compra procesada correctamente',
+    'pedido_id' => $pedido_id,
+    'total' => $total,
+    'metodo_pago' => $metodoPago,
+    'productos' => $resumen
+]);
+exit;
 ?>
