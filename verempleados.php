@@ -97,9 +97,17 @@ try {
   <button onclick="abrirModalCrear()">Crear nuevo empleado</button>
 
   <?php if (empty($empleados)): ?>
-    <p>No hay empleados registrados.</p>
-  <?php else: ?>
-    <table>
+      <p>No hay empleados registrados.</p>
+      <?php else: ?>
+    <label for="ordenFiltro">Ordenar por:</label>
+    <select id="ordenFiltro">
+      <option value="nombre-asc">Nombre (A-Z)</option>
+      <option value="nombre-desc">Nombre (Z-A)</option>
+      <option value="salario-asc">Salario (menor a mayor)</option>
+      <option value="salario-desc">Salario (mayor a menor)</option>
+    </select>
+
+    <table id="tablaEmpleados">
       <thead>
         <tr>
           <th>Nombre</th>
@@ -111,26 +119,26 @@ try {
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <?php foreach ($empleados as $emp): ?>
-          <tr>
-            <td><?= htmlspecialchars($emp['name']) ?></td>
-            <td><?= htmlspecialchars($emp['email']) ?></td>
-            <td>
-              <?= htmlspecialchars($emp['calle']) ?> #<?= htmlspecialchars($emp['numero']) ?>,
-              <?= htmlspecialchars($emp['colonia']) ?>, CP <?= htmlspecialchars($emp['cp']) ?>,
-              <?= htmlspecialchars($emp['ciudad']) ?>, <?= htmlspecialchars($emp['estado']) ?>
-            </td>
-            <td><?= htmlspecialchars($emp['telefono']) ?></td>
-            <td><?= htmlspecialchars($emp['puesto']) ?></td>
-            <td><?= htmlspecialchars($emp['salario'],2) ?></td>
-            <td>
-            <button onclick="abrirModal(<?= $emp['id'] ?>)">Editar</button>
-            <button class="btn-eliminar" data-id="<?= $empleado['id'] ?>">Eliminar</button>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-      </tbody>
+          <tbody>
+          <?php foreach ($empleados as $emp): ?>
+            <tr>
+              <td><?= htmlspecialchars($emp['name']) ?></td>
+              <td><?= htmlspecialchars($emp['email']) ?></td>
+              <td>
+                <?= htmlspecialchars($emp['calle']) ?> #<?= htmlspecialchars($emp['numero']) ?>,
+                <?= htmlspecialchars($emp['colonia']) ?>, CP <?= htmlspecialchars($emp['cp']) ?>,
+                <?= htmlspecialchars($emp['ciudad']) ?>, <?= htmlspecialchars($emp['estado']) ?>
+              </td>
+              <td><?= htmlspecialchars($emp['telefono']) ?></td>
+              <td><?= htmlspecialchars($emp['puesto']) ?></td>
+              <td><?= number_format($emp['salario'], 2) ?></td>
+              <td>
+                <button onclick="abrirModal(<?= $emp['id'] ?>)">Editar</button>
+                <button class="btn-eliminar" data-id="<?= $emp['id'] ?>">Eliminar</button>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
     </table>
   <?php endif; ?>
 
@@ -280,6 +288,36 @@ try {
 
 
 </script>
+
+<script>
+    const selectOrden = document.getElementById('ordenFiltro');
+    const tabla = document.getElementById('tablaEmpleados').querySelector('tbody');
+
+    selectOrden.addEventListener('change', () => {
+      const filas = Array.from(tabla.querySelectorAll('tr'));
+      const valor = selectOrden.value;
+
+      filas.sort((a, b) => {
+        const nombreA = a.cells[0].textContent.trim().toLowerCase();
+        const nombreB = b.cells[0].textContent.trim().toLowerCase();
+        const salarioA = parseFloat(a.cells[5].textContent);
+        const salarioB = parseFloat(b.cells[5].textContent);
+
+        switch (valor) {
+          case 'nombre-asc':
+            return nombreA.localeCompare(nombreB);
+          case 'nombre-desc':
+            return nombreB.localeCompare(nombreA);
+          case 'salario-asc':
+            return salarioA - salarioB;
+          case 'salario-desc':
+            return salarioB - salarioA;
+        }
+      });
+
+      filas.forEach(fila => tabla.appendChild(fila));
+    });
+  </script>
 
 
 </body>

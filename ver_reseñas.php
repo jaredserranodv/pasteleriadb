@@ -25,6 +25,10 @@ try {
                 margin: 0;
                 padding: 0;
             }
+            .usuario {font-weight: bold;color: #333;font-size: 2em;}
+            .fecha {font-size: 1.6em;}
+            .calificacion {font-size: 1.6em;}
+            p {margin: 0; font-size: 1.8em;}
         </style>
 </head>
 <body>
