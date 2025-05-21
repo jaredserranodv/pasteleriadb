@@ -523,7 +523,7 @@ border-radius: 30px;
         height: 500px;
         width: 400px;
     }
-
+    
     #pedidos .container {
         display: flex;
         flex-direction: column;

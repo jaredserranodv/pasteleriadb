@@ -13,3 +13,23 @@ Entró al archivo
 Método de pago recibido: 'efectivo'
 Entró al archivo
 Método de pago recibido: 'tarjeta'
+Entró al archivo
+Método de pago recibido: 'tarjeta'
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Entró al archivo
+Método de pago recibido: 'tarjeta'
+Entró al archivo
+Método de pago recibido: 'tarjeta'
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Entró al archivo
+Método de pago recibido: 'tarjeta'
+Entró al archivo
+Método de pago recibido: 'efectivo'
+Entró al archivo
+Método de pago recibido: 'tarjeta'
+Entró al archivo
+Método de pago recibido: 'efectivo'

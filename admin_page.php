@@ -106,63 +106,120 @@ if(isset($_GET['delete'])){
         </div>
     </header>
 
-    <div class="admin-container">
-   <aside class="sidebar">
-      <h2>Panel Admin</h2>
-      <a href="../Pasteleria_DB/admin_pedidos.php">📦 Ver pedidos</a>
-      <a href="../Pasteleria_DB/verempleados.php">👥 Ver empleados</a>
-      <a href="../Pasteleria_DB/ver_reseñas.php">⭐ Ver reseñas</a>
-      <a href="admin_page.php?add=1" class="add-product-btn">➕ Agregar producto</a>
-   </aside>
+         <div class="admin-container">
+         <aside class="sidebar">
+            <h2>Panel Admin</h2>
+            <a href="../Pasteleria_DB/admin_pedidos.php">📦 Ver pedidos</a>
+            <a href="../Pasteleria_DB/verempleados.php">👥 Ver empleados</a>
+            <a href="../Pasteleria_DB/ver_reseñas.php">⭐ Ver reseñas</a>
+            <a href="admin_page.php?add=1" class="add-product-btn">➕ Agregar producto</a>
+         </aside>
 
-   <main class="admin-main-content">
-      <?php
-      if(isset($message)){
-         foreach($message as $message){
-            echo '<span class="message">'.$message.'</span>';
-         }
-      }
-      ?>
+         <main class="admin-main-content">
+            <?php
+            if(isset($message)){
+               foreach($message as $message){
+                  echo '<span class="message">'.$message.'</span>';
+               }
+            }
+            ?>
 
-         <?php
+               <?php
 
-         $select = mysqli_query($conn, "SELECT * FROM productos");
-         
-         ?>
-               <div class="product-display">
-                  <div class="tituloinventario"><h2>Inventario</h2></div>
-               <table class="product-display-table">
-                  <thead>
-                     <tr>
-                     <th>Imagen</th>
-                     <th>Nombre del producto</th>
-                     <th>Descripción</th>
-                     <th>Categoría</th>
-                     <th>Cantidad</th>
-                     <th>Precio</th>
-                     <th>Acción</th>
-                     </tr>
-                  </thead>
-                  <?php while($row = mysqli_fetch_assoc($select)){ ?>
-                     <tr>
-                     <td><img src="images/<?php echo htmlspecialchars($row['imagen']); ?>" height="100" alt=""></td>
-                     <td><?php echo htmlspecialchars($row['nombre']); ?></td>
-                     <td><?php echo htmlspecialchars($row['descripcion']); ?></td>
-                     <td><?php echo htmlspecialchars($row['categoria']); ?></td>
-                     <td><?php echo (int)$row['cantidad']; ?></td>
-                     <td>$<?php echo number_format($row['precio'], 2); ?></td>
-                     <td>
-                        <a href="admin_update.php?edit=<?php echo (int)$row['id']; ?>" class="btn">
-                           <i class="fas fa-edit"></i> Editar
-                        </a>
-                        <a href="admin_page.php?delete=<?php echo (int)$row['id']; ?>" class="btn">
-                           <i class="fas fa-trash"></i> Eliminar
-                        </a>
-                     </td>
-                     </tr>
-                  <?php } ?>
-               </table>
-               </div>
+               $select = mysqli_query($conn, "SELECT * FROM productos");
+               
+               ?>
+      <div class="product-display">
+      <div class="tituloinventario">
+         <h2>Inventario</h2>
+      </div>
+
+      <!-- Filtro de ordenamiento -->
+      <label for="ordenInventario">Ordenar por:</label>
+      <select id="ordenInventario">
+         <option value="cantidad-desc">Cantidad (mayor a menor)</option>
+         <option value="cantidad-asc">Cantidad (menor a mayor)</option>
+         <option value="precio-desc">Precio (mayor a menor)</option>
+         <option value="precio-asc">Precio (menor a mayor)</option>
+         <option value="categoria-asc">Categoría (A-Z)</option>
+         <option value="categoria-desc">Categoría (Z-A)</option>
+      </select>
+
+      <table class="product-display-table" id="tablaInventario">
+         <thead>
+            <tr>
+            <th>Imagen</th>
+            <th>Nombre del producto</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Acción</th>
+            </tr>
+         </thead>
+         <tbody>
+            <?php while($row = mysqli_fetch_assoc($select)): ?>
+            <tr>
+               <td><img src="images/<?= htmlspecialchars($row['imagen']); ?>" height="100" alt=""></td>
+               <td><?= htmlspecialchars($row['nombre']); ?></td>
+               <td><?= htmlspecialchars($row['descripcion']); ?></td>
+               <td><?= htmlspecialchars($row['categoria']); ?></td>
+               <td><?= (int)$row['cantidad']; ?></td>
+               <td>$<?= number_format($row['precio'], 2); ?></td>
+               <td>
+                  <a href="admin_update.php?edit=<?= (int)$row['id']; ?>" class="btn">
+                  <i class="fas fa-edit"></i> Editar
+                  </a>
+                  <a href="admin_page.php?delete=<?= (int)$row['id']; ?>" class="btn">
+                  <i class="fas fa-trash"></i> Eliminar
+                  </a>
+               </td>
+            </tr>
+            <?php endwhile; ?>
+         </tbody>
+      </table>
+      </div>
+
+         <!-- Script de ordenamiento -->
+         <script>
+         const selectOrden = document.getElementById('ordenInventario');
+         const tabla = document.getElementById('tablaInventario').querySelector('tbody');
+
+         selectOrden.addEventListener('change', () => {
+            const filas = Array.from(tabla.querySelectorAll('tr'));
+            const valor = selectOrden.value;
+
+            filas.sort((a, b) => {
+               const cantidadA = parseInt(a.cells[4].textContent);
+               const cantidadB = parseInt(b.cells[4].textContent);
+               const precioA = parseFloat(a.cells[5].textContent.replace('$', ''));
+               const precioB = parseFloat(b.cells[5].textContent.replace('$', ''));
+               const categoriaA = a.cells[3].textContent.trim().toLowerCase();
+               const categoriaB = b.cells[3].textContent.trim().toLowerCase();
+
+               switch (valor) {
+               case 'cantidad-desc':
+                  return cantidadB - cantidadA;
+               case 'cantidad-asc':
+                  return cantidadA - cantidadB;
+               case 'precio-desc':
+                  return precioB - precioA;
+               case 'precio-asc':
+                  return precioA - precioB;
+               case 'categoria-asc':
+                  return categoriaA.localeCompare(categoriaB);
+               case 'categoria-desc':
+                  return categoriaB.localeCompare(categoriaA);
+               default:
+                  return 0;
+               }
+            });
+
+            filas.forEach(fila => tabla.appendChild(fila));
+         });
+         </script>
+
+
                <!-- Botones de acción 
                      <a href="admin_page.php?add=1" class="btn">Agregar producto</a>
                      <a href="../Pasteleria_DB/admin_pedidos.php" class="btn btn-view-orders">Ver pedidos</a>
